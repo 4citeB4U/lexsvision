@@ -1,0 +1,5337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lex's Vision - Nature Photography & Editor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-color: #2c3e50; /* Updated primary color */
+            --secondary-color: #2ecc71; /* Added secondary color */
+            --accent-color: #f39c12;
+            --accent-glow: #e67e22;
+            --light-color: #ecf0f1;
+            --dark-color: #121212;
+            --nature-green: #27ae60;
+            --nature-blue: #3498db;
+            --transition-slow: all 0.5s ease;
+            --transition-fast: all 0.3s ease;
+
+            /* Editor Variables */
+            --editor-background-color: #1e1e1e; /* Renamed for clarity */
+            --editor-surface-color: #2d2d2d; /* Renamed for clarity */
+            --editor-surface-color-light: #3d3d3d; /* Renamed for clarity */
+            --editor-text-color: #f5f5f5; /* Renamed for clarity */
+            --editor-text-color-secondary: #aaaaaa; /* Renamed for clarity */
+            --editor-border-color: #444444; /* Renamed for clarity */
+            --editor-shadow-color: rgba(0, 0, 0, 0.5); /* Renamed for clarity */
+            --success-color: #27ae60;
+            --error-color: #e74c3c;
+            --info-color: #3498db;
+            --warning-color: #f39c12;
+        }
+
+        /* Light Theme Variables */
+        body.light-theme {
+            --primary-color: #3498db; /* Light theme primary */
+            --secondary-color: #2ecc71; /* Light theme secondary */
+            --accent-color: #e74c3c; /* Light theme accent */
+            --dark-color: #f5f5f5; /* Light theme background */
+            --light-color: #333333; /* Light theme text */
+            --editor-background-color: #f5f5f5;
+            --editor-surface-color: #ffffff;
+            --editor-surface-color-light: #f0f0f0;
+            --editor-text-color: #333333;
+            --editor-text-color-secondary: #666666;
+            --editor-border-color: #dddddd;
+            --editor-shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            overflow-x: hidden; /* Changed from hidden to auto for scrolling */
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Page Switching Styles */
+        .page {
+            display: none; /* Pages hidden by default */
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block; /* Active page is shown */
+        }
+
+        /* Animation Classes */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes logoGlow {
+            0% {
+                text-shadow: 0 0 5px rgba(243, 156, 18, 0.3);
+            }
+            100% {
+                text-shadow: 0 0 15px rgba(243, 156, 18, 0.7), 0 0 30px rgba(243, 156, 18, 0.4);
+            }
+        }
+
+        @keyframes lensEffect {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes rain {
+            from { background-position: 0 0; }
+            to { background-position: 0 100px; }
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(15px) rotate(-2deg); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+
+        @keyframes borderPulse {
+            0% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(243, 156, 18, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in { animation: fadeIn 1.5s ease forwards; }
+        .slide-in-left { animation: slideInLeft 1s ease forwards; }
+        .slide-in-right { animation: slideInRight 1s ease forwards; }
+        .slide-in-up { animation: slideInUp 1s ease forwards; }
+        .zoom-in { animation: zoomIn 1.2s ease forwards; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Parallax Effects */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            transition: background-position 0.5s ease;
+        }
+
+        .parallax-element {
+            transition: transform 0.5s ease;
+        }
+
+        /* Page Navigation */
+        .page-nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+            display: flex;
+            gap: 10px;
+        }
+
+        .page-nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-glow));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .page-nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Home Page Styles */
+        #home-page header {
+            background-color: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 1rem 2rem; /* Consolidated padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: var(--transition-slow);
+            border-bottom: 1px solid rgba(243, 156, 18, 0.3);
+        }
+
+        #home-page header.scrolled {
+            padding: 0.7rem 2rem;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        #home-page header .logo-container { /* Added container for effect */
+            position: relative;
+            display: inline-block;
+        }
+
+        #home-page header .logo {
+            display: flex;
+            align-items: center;
+            color: transparent; /* Changed for gradient */
+            font-size: 2.5rem; /* Increased size */
+            font-weight: bold;
+            background: linear-gradient(135deg, #f39c12, #e67e22, #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            transition: var(--transition-fast);
+            text-shadow: 0 0 10px rgba(243, 156, 18, 0.3);
+            animation: logoGlow 3s infinite alternate;
+            position: relative; /* Needed for ::before */
+        }
+
+        #home-page header .logo i {
+            margin-right: 10px;
+            font-size: 2.5rem; /* Match text size */
+            color: var(--accent-color); /* Give icon a color */
+            text-shadow: none; /* Remove text shadow from icon */
+            background: none; /* Remove background clip from icon */
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+
+        #home-page header .logo::before { /* Lens flare effect */
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), transparent 70%);
+            border-radius: 50%;
+            filter: blur(8px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: lensEffect 6s infinite ease-in-out;
+        }
+
+        #home-page nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px; /* Use gap */
+        }
+
+        #home-page nav a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        #home-page nav a:hover,
+        #home-page nav a.active {
+            color: var(--accent-color);
+        }
+
+        #home-page nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        #home-page nav a:hover::after,
+        #home-page nav a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('lexslogo.png') center/cover no-repeat fixed; /* Use actual image */
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(52, 152, 219, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(243, 156, 18, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.5s;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #f39c12, #e67e22, #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.7s;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.9s;
+        }
+
+        .hero-btn {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-glow));
+            color: white;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.6);
+        }
+
+        .secondary-btn {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .secondary-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 2rem;
+            background-color: #1a1a1a;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, var(--accent-color), var(--accent-glow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: #2a2a2a;
+            padding: 2.5rem 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Editor Page Specific Styles */
+        #editor-page .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        #editor-page .sidebar {
+            width: 250px;
+            background-color: var(--editor-surface-color);
+            border-right: 1px solid var(--editor-border-color);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            overflow: hidden;
+        }
+
+        #editor-page .sidebar.collapsed {
+            width: 60px;
+        }
+
+        #editor-page .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #editor-page .header {
+            height: 60px;
+            background-color: var(--editor-surface-color);
+            border-bottom: 1px solid var(--editor-border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+        }
+
+        #editor-page .editor-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            background-color: var(--editor-background-color); /* Background for editor area */
+        }
+
+        #editor-page .tools-panel {
+            width: 300px;
+            background-color: var(--editor-surface-color);
+            border-left: 1px solid var(--editor-border-color);
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            padding: 15px; /* Add padding */
+        }
+
+        #editor-page .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px; /* Add padding around image */
+        }
+
+        /* Header Styles (Editor) */
+        #editor-page .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color); /* Use editor theme color */
+        }
+
+        #editor-page .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        #editor-page .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        #editor-page .header-btn {
+            background: none;
+            border: none;
+            color: var(--editor-text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+
+        #editor-page .header-btn:hover {
+            background-color: var(--editor-surface-color-light);
+        }
+
+        /* Sidebar Styles (Editor) */
+        #editor-page .sidebar-header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            border-bottom: 1px solid var(--editor-border-color);
+        }
+
+        #editor-page .sidebar-toggle {
+            background: none;
+            border: none;
+            color: var(--editor-text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        #editor-page .sidebar.collapsed .sidebar-toggle {
+            transform: rotate(180deg);
+        }
+
+        #editor-page .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        #editor-page .sidebar-section {
+            margin-bottom: 20px;
+        }
+
+        #editor-page .sidebar-section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--editor-text-color-secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        #editor-page .sidebar-section-title i {
+            margin-right: 8px;
+        }
+
+        #editor-page .sidebar.collapsed .sidebar-section-title span {
+            display: none;
+        }
+
+        #editor-page .sidebar-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 5px;
+            color: var(--editor-text-color);
+            text-decoration: none;
+            width: 100%; /* Ensure full width */
+            background: none; /* Remove default background */
+            border: none; /* Remove default border */
+            text-align: left; /* Align text left */
+        }
+
+        #editor-page .sidebar-btn:hover {
+            background-color: var(--editor-surface-color-light);
+        }
+
+        #editor-page .sidebar-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        #editor-page .sidebar.collapsed .sidebar-btn span {
+            display: none;
+        }
+
+        #editor-page .sidebar-footer {
+            padding: 15px;
+            border-top: 1px solid var(--editor-border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #editor-page .sidebar.collapsed .sidebar-footer span {
+            display: none;
+        }
+
+        /* Image Container Styles (Editor) */
+        #editor-page .edit-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: filter 0.3s ease;
+            box-shadow: 0 5px 15px var(--editor-shadow-color); /* Add shadow to image */
+        }
+
+        #editor-page .crop-overlay {
+            position: absolute;
+            border: 2px dashed var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.2);
+            cursor: move;
+            display: none;
+        }
+
+        #editor-page .crop-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+        }
+
+        #editor-page .animation-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #editor-page .image-container.drag-over {
+            background-color: rgba(52, 152, 219, 0.1);
+            border: 2px dashed var(--primary-color);
+        }
+
+        /* Tools Panel Styles (Editor) */
+        #editor-page .panel {
+            margin-bottom: 15px;
+            background-color: var(--editor-surface-color);
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--editor-border-color); /* Add border */
+        }
+
+        #editor-page .panel-header {
+            padding: 10px 15px;
+            background-color: var(--editor-surface-color-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid var(--editor-border-color); /* Add border */
+        }
+
+        #editor-page .panel-title {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            color: var(--editor-text-color);
+        }
+
+        #editor-page .panel-title i {
+            margin-right: 8px;
+            color: var(--primary-color); /* Icon color */
+        }
+
+        #editor-page .panel-toggle {
+            background: none;
+            border: none;
+            color: var(--editor-text-color);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #editor-page .panel-content {
+            padding: 15px;
+            transition: max-height 0.3s ease, padding 0.3s ease; /* Added padding transition */
+            max-height: 500px; /* Allow content to expand */
+            overflow: hidden; /* Changed from auto to hidden */
+        }
+
+        #editor-page .panel.collapsed .panel-content {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        #editor-page .filter-group {
+            margin-bottom: 15px;
+        }
+
+        #editor-page .filter-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--editor-text-color-secondary);
+        }
+
+        #editor-page .filter-slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--editor-surface-color-light);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #editor-page .filter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+
+        #editor-page .filter-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+        }
+
+        #editor-page .filter-value {
+            width: 40px;
+            text-align: right;
+            background: none;
+            border: none;
+            color: var(--editor-text-color);
+            font-size: 0.9rem;
+        }
+
+        #editor-page .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        #editor-page .tool-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-align: center;
+            border: 1px solid var(--editor-border-color); /* Add border */
+        }
+
+        #editor-page .tool-item:hover {
+            background-color: var(--editor-surface-color-light);
+        }
+
+        #editor-page .tool-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        #editor-page .tool-name {
+            font-size: 0.8rem;
+            color: var(--editor-text-color-secondary);
+        }
+
+        #editor-page .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end; /* Align buttons right */
+        }
+
+        #editor-page .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            display: inline-flex; /* Changed to inline-flex */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #editor-page .btn:hover {
+            transform: translateY(-2px); /* Add hover effect */
+        }
+
+        #editor-page .btn i {
+            margin-right: 5px;
+        }
+
+        #editor-page .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #editor-page .btn-primary:hover {
+            background-color: #2980b9; /* Darken primary */
+        }
+
+        #editor-page .btn-secondary {
+            background-color: var(--editor-surface-color-light);
+            color: var(--editor-text-color);
+        }
+
+        #editor-page .btn-secondary:hover {
+            background-color: #4d4d4d; /* Darken secondary */
+        }
+
+        #editor-page .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        #editor-page .btn-success:hover {
+            background-color: #219653; /* Darken success */
+        }
+
+        #editor-page .btn-danger {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        #editor-page .btn-danger:hover {
+            background-color: #c0392b; /* Darken danger */
+        }
+
+        #editor-page .btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none; /* Disable hover effect */
+        }
+
+        /* History Panel (Editor) */
+        #editor-page .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--editor-border-color); /* Add border */
+            border-radius: 5px; /* Add radius */
+            padding: 5px; /* Add padding */
+        }
+
+        #editor-page .history-item {
+            padding: 8px 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #editor-page .history-item:hover {
+            background-color: var(--editor-surface-color-light);
+        }
+
+        #editor-page .history-item.current {
+            background-color: rgba(52, 152, 219, 0.2);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        #editor-page .history-action {
+            font-size: 0.9rem;
+            color: var(--editor-text-color);
+        }
+
+        #editor-page .history-time {
+            font-size: 0.8rem;
+            color: var(--editor-text-color-secondary);
+        }
+
+        /* Animation Panel (Editor) */
+        #editor-page .animation-controls {
+            margin-bottom: 15px;
+        }
+
+        #editor-page .animation-slider-group {
+            margin-bottom: 10px;
+        }
+
+        #editor-page .active-animations-list {
+            margin-top: 15px;
+            border: 1px solid var(--editor-border-color);
+            border-radius: 5px;
+            padding: 10px;
+            min-height: 50px; /* Ensure it has some height */
+        }
+
+        #editor-page .animation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            background-color: var(--editor-surface-color-light);
+        }
+
+        #editor-page .animation-name {
+            display: flex;
+            align-items: center;
+            color: var(--editor-text-color);
+        }
+
+        #editor-page .animation-icon {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        #editor-page .animation-controls { /* Renamed class */
+            display: flex;
+            gap: 10px;
+        }
+
+        #editor-page .animation-control { /* Renamed class */
+            cursor: pointer;
+            transition: color 0.2s ease;
+            color: var(--editor-text-color-secondary);
+            background: none; /* Ensure button look */
+            border: none;
+            padding: 0;
+        }
+
+        #editor-page .animation-control:hover {
+            color: var(--primary-color);
+        }
+
+        #editor-page .no-animations {
+            text-align: center;
+            color: var(--editor-text-color-secondary);
+            padding: 15px;
+            font-style: italic;
+        }
+
+        /* Dialog Styles */
+        .dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .dialog.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dialog-content {
+            background-color: var(--editor-surface-color); /* Use editor theme */
+            color: var(--editor-text-color); /* Use editor theme */
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px var(--editor-shadow-color);
+            position: relative;
+            display: flex; /* Use flex for layout */
+            flex-direction: column;
+        }
+
+        .dialog-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--editor-border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0; /* Prevent header shrinking */
+        }
+
+        .dialog-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .close-dialog {
+            background: none;
+            border: none;
+            color: var(--editor-text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+            line-height: 1; /* Ensure proper alignment */
+        }
+
+        .close-dialog:hover {
+            color: var(--accent-color); /* Use main accent color */
+        }
+
+        .dialog-body {
+            padding: 20px;
+            flex-grow: 1; /* Allow body to grow */
+            overflow-y: auto; /* Scroll only body if needed */
+        }
+
+        .dialog-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--editor-border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0; /* Prevent footer shrinking */
+        }
+
+        /* Export Dialog */
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive columns */
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .export-option {
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid var(--editor-border-color);
+            cursor: pointer;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .export-option:hover {
+            border-color: var(--primary-color);
+            background-color: var(--editor-surface-color-light);
+        }
+
+        .export-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .export-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .export-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1rem; /* Adjusted size */
+        }
+
+        .export-description {
+            font-size: 0.8rem;
+            color: var(--editor-text-color-secondary);
+        }
+
+        .export-settings {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem; /* Adjusted size */
+        }
+
+        .form-input, select#export-size { /* Style select too */
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid var(--editor-border-color);
+            background-color: var(--editor-surface-color-light);
+            color: var(--editor-text-color);
+            font-size: 1rem;
+        }
+
+        .form-input:focus, select#export-size:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3); /* Add focus ring */
+        }
+
+        .quality-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #quality-value {
+            font-size: 0.9rem;
+            color: var(--editor-text-color-secondary);
+        }
+
+        /* Help Dialog */
+        .help-section {
+            margin-bottom: 20px;
+        }
+
+        .help-section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--editor-border-color); /* Add separator */
+            padding-bottom: 5px;
+        }
+
+        .help-list {
+            list-style-type: none;
+            padding-left: 0; /* Remove default padding */
+        }
+
+        .help-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center; /* Align items vertically */
+        }
+
+        .help-key {
+            background-color: var(--editor-surface-color-light);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--editor-text-color);
+            border: 1px solid var(--editor-border-color); /* Add border */
+        }
+
+        .help-description {
+            flex: 1;
+            font-size: 0.9rem; /* Adjust size */
+            color: var(--editor-text-color-secondary);
+        }
+
+        /* About Dialog */
+        .about-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .about-logo i {
+            font-size: 4rem;
+            color: var(--primary-color);
+        }
+
+        .about-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .about-version {
+            text-align: center;
+            color: var(--editor-text-color-secondary);
+            margin-bottom: 20px;
+        }
+
+        .about-description {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95rem; /* Adjust size */
+        }
+
+        .about-features-title { /* Added class */
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-top: 15px;
+        }
+
+        .about-features {
+            list-style-type: none;
+            padding-left: 0; /* Remove default padding */
+        }
+
+        .about-feature {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem; /* Adjust size */
+        }
+
+        .about-feature i {
+            color: var(--secondary-color); /* Use secondary color */
+            margin-right: 10px;
+            width: 16px; /* Ensure alignment */
+            text-align: center;
+        }
+
+        .about-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--editor-text-color-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: var(--editor-surface-color);
+            color: var(--editor-text-color);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px var(--editor-shadow-color);
+            padding: 15px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1001; /* Ensure above dialogs */
+            display: flex;
+            align-items: flex-start;
+            border-left: 4px solid var(--info-color); /* Default border */
+        }
+
+        .notification.active {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            margin-right: 15px;
+            font-size: 1.5rem;
+            line-height: 1; /* Align icon better */
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: var(--editor-text-color-secondary);
+        }
+
+        .close-notification {
+            background: none;
+            border: none;
+            color: var(--editor-text-color-secondary);
+            cursor: pointer;
+            font-size: 1.2rem; /* Increased size */
+            padding: 0;
+            margin-left: 10px;
+            transition: color 0.2s ease;
+            line-height: 1;
+        }
+
+        .close-notification:hover {
+            color: var(--accent-color);
+        }
+
+        /* Notification Types */
+        .notification[data-type="success"] { border-left-color: var(--success-color); }
+        .notification[data-type="success"] .notification-icon { color: var(--success-color); }
+        .notification[data-type="error"] { border-left-color: var(--error-color); }
+        .notification[data-type="error"] .notification-icon { color: var(--error-color); }
+        .notification[data-type="warning"] { border-left-color: var(--warning-color); }
+        .notification[data-type="warning"] .notification-icon { color: var(--warning-color); }
+        .notification[data-type="info"] { border-left-color: var(--info-color); }
+        .notification[data-type="info"] .notification-icon { color: var(--info-color); }
+
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            #editor-page .tools-panel {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            /* Keep editor layout, but maybe hide sidebar by default */
+            #editor-page .sidebar {
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 100%;
+                z-index: 20;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                border-right: 1px solid var(--editor-border-color); /* Add border back */
+            }
+            #editor-page .sidebar.open { /* Add class to open */
+                transform: translateX(0);
+            }
+            #editor-page .sidebar.collapsed { /* Adjust collapsed state */
+                 width: 250px; /* Keep width when collapsed but hidden */
+                 transform: translateX(-100%);
+            }
+             #editor-page .sidebar.collapsed.open {
+                 width: 60px;
+                 transform: translateX(0);
+             }
+
+            #editor-page .sidebar-toggle { /* Reposition toggle */
+                position: fixed;
+                left: 10px;
+                top: 70px; /* Below header */
+                z-index: 21;
+                background-color: var(--editor-surface-color);
+                border-radius: 50%;
+                box-shadow: 0 2px 5px var(--editor-shadow-color);
+            }
+             #editor-page .sidebar.open .sidebar-toggle {
+                 left: 260px; /* Adjust position when open */
+             }
+             #editor-page .sidebar.collapsed.open .sidebar-toggle {
+                 left: 70px;
+             }
+
+            #editor-page .tools-panel {
+                position: absolute;
+                right: 0;
+                top: 60px; /* Below header */
+                height: calc(100% - 60px);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                z-index: 10;
+                border-left: 1px solid var(--editor-border-color); /* Add border back */
+            }
+
+            #editor-page .tools-panel.open { /* Add class to open */
+                transform: translateX(0);
+            }
+
+            #editor-page .panel-toggle-btn { /* Reposition toggle */
+                position: absolute;
+                left: -40px;
+                top: 10px;
+                width: 40px;
+                height: 40px;
+                background-color: var(--editor-surface-color);
+                border: 1px solid var(--editor-border-color);
+                border-right: none;
+                border-radius: 5px 0 0 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                color: var(--editor-text-color);
+                font-size: 1.2rem;
+                box-shadow: -2px 0 5px var(--editor-shadow-color);
+            }
+        }
+
+        @media (max-width: 768px) {
+            #editor-page .header {
+                padding: 0 10px;
+            }
+
+            #editor-page .logo span {
+                display: none; /* Hide text logo on small screens */
+            }
+
+            #editor-page .tools-panel {
+                width: 250px; /* Reduce width */
+            }
+
+            .dialog-content {
+                width: 95%;
+            }
+
+            .export-options {
+                grid-template-columns: 1fr; /* Stack export options */
+            }
+
+            .notification {
+                width: calc(100% - 40px);
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            #editor-page .tool-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns for tools */
+            }
+
+            #editor-page .panel-content {
+                padding: 10px;
+            }
+
+            #editor-page .header-actions {
+                gap: 5px; /* Reduce gap */
+            }
+            #editor-page .header-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .flex-center { display: flex; justify-content: center; align-items: center; }
+        .text-center { text-align: center; }
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
+
+        /* Animations */
+        .animate-pulse { animation: pulse 2s infinite ease-in-out; }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out; }
+        .animate-slide-right { animation: slideInRight 0.3s ease-out; }
+        .animate-slide-left { animation: slideInLeft 0.3s ease-out; }
+        .animate-rotate { animation: rotate 2s linear infinite; }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: rotate 1s linear infinite;
+        }
+        .spinner-sm { width: 20px; height: 20px; border-width: 2px; }
+
+        /* Drag and Drop Styles */
+        .drag-area {
+            border: 2px dashed var(--editor-border-color);
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            background-color: rgba(0,0,0,0.1); /* Slight background */
+            margin: 20px;
+        }
+        .drag-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        .drag-icon { font-size: 3rem; color: var(--editor-text-color-secondary); margin-bottom: 15px; }
+        .drag-text { font-size: 1.2rem; margin-bottom: 10px; color: var(--editor-text-color); }
+        .drag-hint { color: var(--editor-text-color-secondary); font-size: 0.9rem; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--editor-surface-color-light); }
+        ::-webkit-scrollbar-thumb { background: var(--editor-border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--editor-text-color-secondary); }
+
+        /* Tooltip */
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltip-text {
+            visibility: hidden; width: auto; white-space: nowrap; /* Adjust width */
+            background-color: var(--editor-surface-color); color: var(--editor-text-color);
+            text-align: center; border-radius: 5px; padding: 5px 8px; /* Adjust padding */
+            position: absolute; z-index: 1; bottom: 125%; left: 50%;
+            transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;
+            box-shadow: 0 2px 5px var(--editor-shadow-color); font-size: 0.8rem;
+        }
+        .tooltip .tooltip-text::after {
+            content: ""; position: absolute; top: 100%; left: 50%;
+            margin-left: -5px; border-width: 5px; border-style: solid;
+            border-color: var(--editor-surface-color) transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+        /* Custom Checkbox Styling */
+        .custom-checkbox { display: flex; align-items: center; cursor: pointer; user-select: none; /* Prevent text selection */ }
+        .custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+        .checkmark {
+            position: relative; height: 18px; width: 18px;
+            background-color: var(--editor-surface-color-light);
+            border: 1px solid var(--editor-border-color); /* Add border */
+            border-radius: 3px; margin-right: 10px; transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .custom-checkbox:hover input ~ .checkmark { background-color: var(--editor-border-color); }
+        .custom-checkbox input:checked ~ .checkmark { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .checkmark:after { content: ""; position: absolute; display: none; }
+        .custom-checkbox input:checked ~ .checkmark:after { display: block; }
+        .custom-checkbox .checkmark:after {
+            left: 6px; top: 2px; width: 5px; height: 10px;
+            border: solid white; border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        .custom-checkbox span { font-size: 0.9rem; } /* Style label text */
+
+    </style>
+</head>
+
+<body>
+  <!-- Page Navigation -->
+  <div class="page-nav">
+    <button class="page-nav-btn" data-page="home">Home</button>
+    <button class="page-nav-btn" data-page="editor">Photo Editor</button>
+  </div>
+
+  <!-- Home Page -->
+  <div id="home-page" class="page active">
+    <header>
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-leaf"></i>
+          <span>Lex's Vision</span>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+          <li><a href="#editor" class="nav-link" data-page="editor">Editor</a></li>
+          <!-- Add About and Contact later if needed -->
+          <!-- <li><a href="#about" class="nav-link" data-page="about">About</a></li> -->
+          <!-- <li><a href="#contact" class="nav-link" data-page="contact">Contact</a></li> -->
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section with Parallax -->
+    <section class="hero parallax-bg">
+      <h1 class="fade-in">Lex's Vision</h1>
+      <p class="slide-in-up">Transform your nature photography with powerful editing tools and stunning animations</p>
+      <div class="hero-buttons">
+        <button class="hero-btn primary-btn" data-page="editor">Start Editing</button>
+        <!-- <a href="#gallery" class="hero-btn secondary-btn">View Gallery</a> -->
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <h2 class="section-title reveal">Powerful Features</h2>
+      <div class="features-container">
+        <div class="feature-card reveal">
+          <div class="feature-icon"><i class="fas fa-magic"></i></div>
+          <h3>Advanced Editing</h3>
+          <p>Professional-grade tools optimized for nature photography</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon"><i class="fas fa-film"></i></div>
+          <h3>Nature Animations</h3>
+          <p>Add rain, snow, sparkles and other natural effects to your photos</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon"><i class="fas fa-palette"></i></div>
+          <h3>Color Enhancement</h3>
+          <p>Bring out the vibrant colors of nature with specialized filters</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Editor Page -->
+  <div id="editor-page" class="page">
+    <div class="app-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <i class="fas fa-leaf"></i>
+            <span>Lex's Vision</span>
+          </div>
+          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </div>
+
+        <div class="sidebar-content">
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">
+              <i class="fas fa-file"></i>
+              <span>File</span>
+            </div>
+            <button class="sidebar-btn" id="open-image-btn">
+              <i class="fas fa-folder-open"></i>
+              <span>Open Image</span>
+            </button>
+            <button class="sidebar-btn" id="save-image-btn">
+              <i class="fas fa-save"></i>
+              <span>Save Image</span>
+            </button>
+            <button class="sidebar-btn" id="export-btn">
+              <i class="fas fa-file-export"></i>
+              <span>Export</span>
+            </button>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">
+              <i class="fas fa-sliders-h"></i>
+              <span>Adjustments</span>
+            </div>
+            <button class="sidebar-btn tool-btn" data-tool="filter"> <!-- Added tool-btn -->
+              <i class="fas fa-adjust"></i>
+              <span>Basic Adjustments</span>
+            </button>
+            <button class="sidebar-btn tool-btn" data-tool="color"> <!-- Added tool-btn -->
+              <i class="fas fa-palette"></i>
+              <span>Color</span>
+            </button>
+            <button class="sidebar-btn tool-btn" data-tool="effects"> <!-- Added tool-btn -->
+              <i class="fas fa-magic"></i>
+              <span>Effects</span>
+            </button>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">
+              <i class="fas fa-tools"></i>
+              <span>Tools</span>
+            </div>
+            <button class="sidebar-btn tool-btn" data-tool="crop"> <!-- Added tool-btn -->
+              <i class="fas fa-crop-alt"></i>
+              <span>Crop</span>
+            </button>
+            <!-- Add Rotate/Resize later if needed -->
+            <!-- <button class="sidebar-btn" id="rotate-btn">
+              <i class="fas fa-sync"></i>
+              <span>Rotate</span>
+            </button>
+            <button class="sidebar-btn" id="resize-btn">
+              <i class="fas fa-expand-arrows-alt"></i>
+              <span>Resize</span>
+            </button> -->
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">
+              <i class="fas fa-star"></i>
+              <span>Animations</span>
+            </div>
+            <button class="sidebar-btn tool-btn" data-tool="animation"> <!-- Added tool-btn -->
+              <i class="fas fa-film"></i>
+              <span>Add Animation</span>
+            </button>
+            <!-- <button class="sidebar-btn" id="animation-settings-btn">
+              <i class="fas fa-cog"></i>
+              <span>Animation Settings</span>
+            </button> -->
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <button class="sidebar-btn" id="help-btn">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+          </button>
+          <button class="sidebar-btn" id="about-btn">
+            <i class="fas fa-info-circle"></i>
+            <span>About</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+          <div class="logo">
+            <!-- Logo content can be minimal here if shown in sidebar -->
+          </div>
+
+          <div class="header-actions">
+            <button class="header-btn" id="undo-btn" title="Undo (Ctrl+Z)" aria-label="Undo last action">
+              <i class="fas fa-undo"></i>
+            </button>
+            <button class="header-btn" id="redo-btn" title="Redo (Ctrl+Y)" aria-label="Redo last action">
+              <i class="fas fa-redo"></i>
+            </button>
+            <button class="header-btn" id="reset-btn" title="Reset Image" aria-label="Reset image to original">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="header-btn" id="theme-toggle" title="Switch to Light Theme" aria-label="Toggle light/dark theme">
+              <i class="fas fa-sun"></i>
+            </button>
+            <button class="header-btn" id="fullscreen-toggle" title="Enter Fullscreen (F11)" aria-label="Toggle fullscreen mode">
+              <i class="fas fa-expand"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Editor Container -->
+        <div class="editor-container">
+          <!-- Image Container -->
+          <div class="image-container drag-area"> <!-- Added drag-area -->
+             <div class="drag-content"> <!-- Added container for text/icon -->
+                <div class="drag-icon"><i class="fas fa-image"></i></div>
+                <div class="drag-text">Drag & Drop Image Here</div>
+                <div class="drag-hint">or click 'Open Image' in the sidebar</div>
+             </div>
+            <img src="" alt="Edit Image" class="edit-image hidden"> <!-- Start hidden -->
+            <div class="crop-overlay"></div>
+            <canvas class="animation-canvas"></canvas>
+          </div>
+
+          <!-- Tools Panel -->
+          <div class="tools-panel">
+            <button class="panel-toggle-btn" aria-label="Toggle Tools Panel"> <!-- Added for mobile -->
+              <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <!-- Basic Adjustments Panel -->
+            <div class="panel tool-panel active" data-tool="filter"> <!-- Added tool-panel and data-tool -->
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fas fa-adjust"></i>
+                  Basic Adjustments
+                </div>
+                <button class="panel-toggle" aria-label="Toggle Basic Adjustments Panel">
+                  <i class="fas fa-chevron-up"></i>
+                </button>
+              </div>
+              <div class="panel-content">
+                <div class="filter-group">
+                  <div class="filter-label">
+                    <label for="brightness-slider">Brightness</label> <!-- Use label -->
+                    <output for="brightness-slider" id="brightness-value">100</output> <!-- Use output -->
+                  </div>
+                  <input type="range" min="0" max="200" value="100" class="filter-slider" id="brightness-slider" aria-label="Brightness adjustment">
+                </div>
+
+                <div class="filter-group">
+                  <div class="filter-label">
+                    <label for="contrast-slider">Contrast</label>
+                    <output for="contrast-slider" id="contrast-value">100</output>
+                  </div>
+                  <input type="range" min="0" max="200" value="100" class="filter-slider" id="contrast-slider" aria-label="Contrast adjustment">
+                </div>
+
+                <div class="filter-group">
+                  <div class="filter-label">
+                    <label for="saturation-slider">Saturation</label>
+                    <output for="saturation-slider" id="saturation-value">100</output>
+                  </div>
+                  <input type="range" min="0" max="200" value="100" class="filter-slider" id="saturation-slider" aria-label="Saturation adjustment">
+                </div>
+
+                <!-- Removed Sharpness for simplicity, add back if needed -->
+                <!-- <div class="filter-group">
+                  <div class="filter-label">
+                    <label for="sharpness-slider">Sharpness</label>
+                    <output for="sharpness-slider" id="sharpness-value">0</output>
+                  </div>
+                  <input type="range" min="0" max="100" value="0" class="filter-slider" id="sharpness-slider" aria-label="Sharpness adjustment">
+                </div> -->
+
+                <!-- Removed Apply/Reset buttons from individual panels for simplicity -->
+              </div>
+            </div>
+
+            <!-- Color Adjustments Panel -->
+            <div class="panel tool-panel" data-tool="color"> <!-- Added tool-panel and data-tool -->
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fas fa-palette"></i>
+    const imageRect = this.editImage.getBoundingClientRect();
+    const naturalRatio = this.editImage.naturalWidth / imageRect.width;
+
+    // Calculate crop in natural image coordinates
+    const naturalCrop = {
+      x: this.cropArea.x * naturalRatio,
+      y: this.cropArea.y * naturalRatio,
+      width: this.cropArea.width * naturalRatio,
+      height: this.cropArea.height * naturalRatio
+    };
+
+    // Set canvas size to cropped size
+    canvas.width = naturalCrop.width;
+    canvas.height = naturalCrop.height;
+
+    // Draw cropped image
+    ctx.drawImage(
+      this.editImage,
+      naturalCrop.x, naturalCrop.y, naturalCrop.width, naturalCrop.height,
+      0, 0, canvas.width, canvas.height
+    );
+
+    // Create new image from canvas
+    const croppedImage = new Image();
+    croppedImage.src = canvas.toDataURL();
+
+    // Set as current image
+    croppedImage.onload = () => {
+      this.currentImage = croppedImage;
+      this.editImage.src = croppedImage.src;
+
+      // Hide crop overlay
+      this.cropOverlay.style.display = 'none';
+
+      // Reset crop area
+      this.cropArea = null;
+
+      // Add to history
+      this.addToHistory('Crop Image');
+
+      // Show notification
+      this.showNotification('Image Cropped', 'Image has been cropped successfully', 'success');
+
+      // Switch back to filter tool
+      this.activateTool('filter');
+    };
+  }
+
+  cancelCropTool() {
+    if (!this.cropOverlay) return;
+
+    // Hide crop overlay
+    this.cropOverlay.style.display = 'none';
+
+    // Reset crop area
+    this.cropArea = null;
+
+    // Switch back to filter tool
+    this.activateTool('filter');
+  }
+
+  // Text tool methods
+  initializeTextTool() {
+    // Text tool implementation would go here
+  }
+
+  activateTextTool() {
+    // Text tool activation would go here
+  }
+
+  cancelTextTool() {
+    // Text tool cancellation would go here
+  }
+
+  // Drawing tool methods
+  initializeDrawingTool() {
+    // Drawing tool implementation would go here
+  }
+
+  activateDrawingTool() {
+    // Drawing tool activation would go here
+  }
+
+  cancelDrawingTool() {
+    // Drawing tool cancellation would go here
+  }
+
+  // Helper method to show notifications
+  showNotification(title, message, type = 'info') {
+    showNotification(title, message, type);
+  }
+}
+
+// Initialize the editor when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Create editor instance
+  const editor = new PhotoEditor();
+
+  // Set up UI interactions
+  setupUIInteractions();
+});
+
+// Set up UI interactions
+function setupUIInteractions() {
+  // Toggle panels
+  const panelToggles = document.querySelectorAll('.panel-toggle');
+
+  panelToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const panel = toggle.closest('.panel');
+      if (panel) {
+        panel.classList.toggle('collapsed');
+
+        // Update toggle icon
+        const icon = toggle.querySelector('i');
+        if (icon) {
+          if (panel.classList.contains('collapsed')) {
+            icon.className = 'fas fa-chevron-down';
+          } else {
+            icon.className = 'fas fa-chevron-up';
+          }
+        }
+      }
+    });
+  });
+
+  // Toggle sidebar
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.querySelector('.sidebar');
+
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+
+      // Update toggle icon
+      const icon = sidebarToggle.querySelector('i');
+      if (icon) {
+        if (sidebar.classList.contains('collapsed')) {
+          icon.className = 'fas fa-chevron-right';
+        } else {
+          icon.className = 'fas fa-chevron-left';
+        }
+      }
+    });
+  }
+
+  // Export options
+  const exportOptions = document.querySelectorAll('.export-option');
+
+  exportOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      // Remove selected class from all options
+      exportOptions.forEach(opt => opt.classList.remove('selected'));
+
+      // Add selected class to clicked option
+      option.classList.add('selected');
+    });
+  });
+
+  // Close notification
+  const notificationClose = document.querySelector('.notification-close');
+  const notification = document.querySelector('.notification');
+
+  if (notificationClose && notification) {
+    notificationClose.addEventListener('click', () => {
+      notification.classList.remove('active');
+    });
+  }
+}// Main Editor Application
+class PhotoEditor {
+  constructor() {
+    this.currentImage = null;
+    this.originalImage = null;
+    this.filters = {
+      brightness: 100,
+      contrast: 100,
+      saturation: 100,
+      blur: 0,
+      hue: 0
+    };
+    this.cropArea = null;
+    this.isDragging = false;
+    this.animationManager = null;
+    this.history = [];
+    this.historyIndex = -1;
+
+    this.initialize();
+  }
+
+  initialize() {
+    // Set up DOM elements
+    this.setupElements();
+
+    // Set up event listeners
+    this.setupEventListeners();
+
+    // Initialize animation system
+    this.setupAnimations();
+
+    // Load default image
+    this.loadDefaultImage();
+
+    // Initialize tools
+    this.initializeTools();
+
+    console.log('Photo Editor initialized');
+  }
+
+  setupElements() {
+    // Main editor elements
+    this.editorContainer = document.querySelector('.editor-container');
+    this.imageContainer = document.querySelector('.image-container');
+    this.editImage = document.querySelector('.edit-image');
+    this.cropOverlay = document.querySelector('.crop-overlay');
+    this.animationCanvas = document.querySelector('.animation-canvas');
+
+    // Control panels
+    this.filterControls = document.querySelector('.filter-controls');
+    this.toolsPanel = document.querySelector('.tools-panel');
+    this.historyPanel = document.querySelector('.history-panel');
+
+    // Buttons
+    this.undoBtn = document.getElementById('undo-btn');
+    this.redoBtn = document.getElementById('redo-btn');
+    this.resetBtn = document.getElementById('reset-btn');
+    this.saveBtn = document.getElementById('save-btn');
+    this.exportBtn = document.getElementById('export-btn');
+
+    // Sliders
+    this.brightnessSlider = document.getElementById('brightness');
+    this.contrastSlider = document.getElementById('contrast');
+    this.saturationSlider = document.getElementById('saturation');
+    this.blurSlider = document.getElementById('blur');
+    this.hueSlider = document.getElementById('hue');
+  }
+
+  setupEventListeners() {
+    // Filter sliders
+    if (this.brightnessSlider) {
+      this.brightnessSlider.addEventListener('input', () => {
+        this.filters.brightness = this.brightnessSlider.value;
+        this.applyFilters();
+      });
+    }
+
+    if (this.contrastSlider) {
+      this.contrastSlider.addEventListener('input', () => {
+        this.filters.contrast = this.contrastSlider.value;
+        this.applyFilters();
+      });
+    }
+
+    if (this.saturationSlider) {
+      this.saturationSlider.addEventListener('input', () => {
+        this.filters.saturation = this.saturationSlider.value;
+        this.applyFilters();
+      });
+    }
+
+    if (this.blurSlider) {
+      this.blurSlider.addEventListener('input', () => {
+        this.filters.blur = this.blurSlider.value;
+        this.applyFilters();
+      });
+    }
+
+    if (this.hueSlider) {
+      this.hueSlider.addEventListener('input', () => {
+        this.filters.hue = this.hueSlider.value;
+        this.applyFilters();
+      });
+    }
+
+    // History navigation
+    if (this.undoBtn) {
+      this.undoBtn.addEventListener('click', () => this.undo());
+    }
+
+    if (this.redoBtn) {
+      this.redoBtn.addEventListener('click', () => this.redo());
+    }
+
+    if (this.resetBtn) {
+      this.resetBtn.addEventListener('click', () => this.resetImage());
+    }
+
+    // Save and export
+    if (this.saveBtn) {
+      this.saveBtn.addEventListener('click', () => this.saveImage());
+    }
+
+    if (this.exportBtn) {
+      this.exportBtn.addEventListener('click', () => this.showExportDialog());
+    }
+
+    // Drag and drop for image loading
+    if (this.imageContainer) {
+      this.imageContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.imageContainer.classList.add('drag-over');
+      });
+
+      this.imageContainer.addEventListener('dragleave', () => {
+        this.imageContainer.classList.remove('drag-over');
+      });
+
+      this.imageContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.imageContainer.classList.remove('drag-over');
+
+        if (e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          if (file.type.match('image.*')) {
+            this.loadImageFromFile(file);
+          } else {
+            this.showNotification('Invalid File', 'Please drop an image file', 'error');
+          }
+        }
+      });
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ctrl+Z for undo
+      if (e.ctrlKey && e.key === 'z') {
+        e.preventDefault();
+        this.undo();
+      }
+
+      // Ctrl+Y for redo
+      if (e.ctrlKey && e.key === 'y') {
+        e.preventDefault();
+        this.redo();
+      }
+
+      // Escape to cancel current tool
+      if (e.key === 'Escape') {
+        this.cancelCurrentTool();
+      }
+    });
+  }
+
+  setupAnimations() {
+    // Initialize animation manager
+    this.animationManager = initializeAnimationSystem();
+
+    // Set up UI integration
+    setupAnimationUI(this.animationManager);
+
+    // Set up export functionality
+    setupExport(this.animationManager);
+  }
+
+  loadDefaultImage() {
+    // Load a default nature image
+    const defaultImage = 'assets/images/default-nature.jpg';
+    this.loadImageFromURL(defaultImage);
+  }
+
+  loadImageFromURL(url) {
+    const img = new Image();
+
+    img.onload = () => {
+      this.setImage(img);
+      this.addToHistory('Load Image');
+    };
+
+    img.onerror = () => {
+      console.error('Failed to load image:', url);
+      this.showNotification('Error', 'Failed to load image', 'error');
+    };
+
+    img.src = url;
+  }
+
+  loadImageFromFile(file) {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const img = new Image();
+
+      img.onload = () => {
+        this.setImage(img);
+        this.addToHistory('Load Image');
+        this.showNotification('Image Loaded', 'Your image has been loaded successfully', 'success');
+      };
+
+      img.src = e.target.result;
+    };
+
+    reader.onerror = () => {
+      console.error('Failed to read file');
+      this.showNotification('Error', 'Failed to read image file', 'error');
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  setImage(img) {
+    if (!this.editImage) return;
+
+    // Store original image for reset
+    this.originalImage = img;
+    this.currentImage = img;
+
+    // Set image source
+    this.editImage.src = img.src;
+
+    // Reset filters
+    this.resetFilters();
+
+    // Clear any active animations
+    if (this.animationManager) {
+      this.animationManager.clearAll();
+    }
+
+    // Reset crop area
+    this.cropArea = null;
+
+    // Update UI
+    this.updateUI();
+  }
+
+  resetFilters() {
+    this.filters = {
+      brightness: 100,
+      contrast: 100,
+      saturation: 100,
+      blur: 0,
+      hue: 0
+    };
+
+    // Reset sliders
+    if (this.brightnessSlider) this.brightnessSlider.value = this.filters.brightness;
+    if (this.contrastSlider) this.contrastSlider.value = this.filters.contrast;
+    if (this.saturationSlider) this.saturationSlider.value = this.filters.saturation;
+    if (this.blurSlider) this.blurSlider.value = this.filters.blur;
+    if (this.hueSlider) this.hueSlider.value = this.filters.hue;
+
+    // Apply reset filters
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    if (!this.editImage) return;
+
+    // Build CSS filter string
+    const filterString = `
+      brightness(${this.filters.brightness}%)
+      contrast(${this.filters.contrast}%)
+      saturate(${this.filters.saturation}%)
+      blur(${this.filters.blur}px)
+      hue-rotate(${this.filters.hue}deg)
+    `;
+
+    // Apply filters
+    this.editImage.style.filter = filterString;
+
+    // Add to history
+    this.addToHistory('Apply Filters');
+  }
+
+  resetImage() {
+    if (!this.originalImage) return;
+
+    // Reset to original image
+    this.currentImage = this.originalImage;
+    this.editImage.src = this.originalImage.src;
+
+    // Reset filters
+    this.resetFilters();
+
+    // Clear animations
+    if (this.animationManager) {
+      this.animationManager.clearAll();
+    }
+
+    // Reset crop area
+    this.cropArea = null;
+
+    // Update UI
+    this.updateUI();
+
+    // Add to history
+    this.addToHistory('Reset Image');
+
+    // Show notification
+    this.showNotification('Image Reset', 'Image has been reset to original', 'info');
+  }
+
+  saveImage() {
+    if (!this.editImage) return;
+
+    // Create canvas to apply filters
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size to match image
+    canvas.width = this.editImage.naturalWidth;
+    canvas.height = this.editImage.naturalHeight;
+
+    // Draw image with filters
+    ctx.filter = this.editImage.style.filter;
+    ctx.drawImage(this.editImage, 0, 0);
+
+    // Convert to data URL
+    try {
+      const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+
+      // Create download link
+      const downloadLink = document.createElement('a');
+      downloadLink.href = dataURL;
+      downloadLink.download = 'lexs-vision-edit.jpg';
+
+      // Trigger download
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      // Show notification
+      this.showNotification('Image Saved', 'Your edited image has been saved', 'success');
+    } catch (err) {
+      console.error('Failed to save image:', err);
+      this.showNotification('Error', 'Failed to save image', 'error');
+    }
+  }
+
+  showExportDialog() {
+    const exportDialog = document.getElementById('export-dialog');
+    if (!exportDialog) return;
+
+    // Set default filename
+    const filenameInput = document.getElementById('export-filename');
+    if (filenameInput) {
+      filenameInput.value = 'my-animated-nature-image';
+    }
+
+    // Show dialog
+    exportDialog.classList.add('active');
+
+    // Set up export options
+    const exportOptions = exportDialog.querySelectorAll('.export-option');
+    exportOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        // Remove selected class from all options
+        exportOptions.forEach(opt => opt.classList.remove('selected'));
+
+        // Add selected class to clicked option
+        option.classList.add('selected');
+      });
+    });
+
+    // Select first option by default
+    if (exportOptions.length > 0) {
+      exportOptions[0].classList.add('selected');
+    }
+
+    // Set up cancel button
+    const cancelBtn = document.getElementById('cancel-export');
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        exportDialog.classList.remove('active');
+      });
+    }
+  }
+
+  addToHistory(action) {
+    // Add current state to history
+    const state = {
+      action: action,
+      image: this.editImage ? this.editImage.src : null,
+      filters: { ...this.filters },
+      timestamp: new Date().toLocaleTimeString()
+    };
+
+    // If we're not at the end of history, remove future states
+    if (this.historyIndex < this.history.length - 1) {
+      this.history = this.history.slice(0, this.historyIndex + 1);
+    }
+
+    // Add new state
+    this.history.push(state);
+    this.historyIndex = this.history.length - 1;
+
+    // Limit history size
+    if (this.history.length > 20) {
+      this.history.shift();
+      this.historyIndex--;
+    }
+
+    // Update history UI
+    this.updateHistoryUI();
+
+    // Update undo/redo buttons
+    this.updateUndoRedoButtons();
+  }
+
+  undo() {
+    if (this.historyIndex <= 0) return;
+
+    // Move back in history
+    this.historyIndex--;
+
+    // Apply historical state
+    this.applyHistoricalState(this.history[this.historyIndex]);
+
+    // Update undo/redo buttons
+    this.updateUndoRedoButtons();
+
+    // Show notification
+    this.showNotification('Undo', `Undid ${this.history[this.historyIndex + 1].action}`, 'info');
+  }
+
+  redo() {
+    if (this.historyIndex >= this.history.length - 1) return;
+
+    // Move forward in history
+    this.historyIndex++;
+
+    // Apply historical state
+    this.applyHistoricalState(this.history[this.historyIndex]);
+
+    // Update undo/redo buttons
+    this.updateUndoRedoButtons();
+
+    // Show notification
+    this.showNotification('Redo', `Redid ${this.history[this.historyIndex].action}`, 'info');
+  }
+
+  applyHistoricalState(state) {
+    if (!state) return;
+
+    // Apply image
+    if (state.image && this.editImage) {
+      this.editImage.src = state.image;
+    }
+
+    // Apply filters
+    if (state.filters) {
+      this.filters = { ...state.filters };
+
+      // Update sliders
+      if (this.brightnessSlider) this.brightnessSlider.value = this.filters.brightness;
+      if (this.contrastSlider) this.contrastSlider.value = this.filters.contrast;
+      if (this.saturationSlider) this.saturationSlider.value = this.filters.saturation;
+      if (this.blurSlider) this.blurSlider.value = this.filters.blur;
+      if (this.hueSlider) this.hueSlider.value = this.filters.hue;
+
+      // Apply filters
+      this.applyFilters();
+    }
+  }
+
+  updateUndoRedoButtons() {
+    // Update undo button
+    if (this.undoBtn) {
+      if (this.historyIndex <= 0) {
+        this.undoBtn.classList.add('disabled');
+      } else {
+        this.undoBtn.classList.remove('disabled');
+      }
+    }
+
+    // Update redo button
+    if (this.redoBtn) {
+      if (this.historyIndex >= this.history.length - 1) {
+        this.redoBtn.classList.add('disabled');
+      } else {
+        this.redoBtn.classList.remove('disabled');
+      }
+    }
+  }
+
+  updateHistoryUI() {
+    const historyList = document.querySelector('.history-list');
+    if (!historyList) return;
+
+    // Clear current list
+    historyList.innerHTML = '';
+
+    // Add history items
+    this.history.forEach((state, index) => {
+      const historyItem = document.createElement('div');
+      historyItem.className = 'history-item';
+
+      if (index === this.historyIndex) {
+        historyItem.classList.add('current');
+      }
+
+      historyItem.innerHTML = `
+        <div class="history-action">${state.action}</div>
+        <div class="history-time">${state.timestamp}</div>
+      `;
+
+      // Add click handler to jump to this state
+      historyItem.addEventListener('click', () => {
+        this.historyIndex = index;
+        this.applyHistoricalState(state);
+        this.updateHistoryUI();
+        this.updateUndoRedoButtons();
+      });
+
+      historyList.appendChild(historyItem);
+    });
+  }
+
+  updateUI() {
+    // Update history UI
+    this.updateHistoryUI();
+
+    // Update undo/redo buttons
+    this.updateUndoRedoButtons();
+
+    // Update active tool
+    this.updateActiveTool();
+  }
+
+  initializeTools() {
+    // Set up tool buttons
+    const toolButtons = document.querySelectorAll('.tool-btn');
+
+    toolButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tool = button.getAttribute('data-tool');
+        this.activateTool(tool);
+      });
+    });
+
+    // Initialize crop tool
+    this.initializeCropTool();
+
+    // Initialize text tool
+    this.initializeTextTool();
+
+    // Initialize drawing tool
+    this.initializeDrawingTool();
+  }
+
+  activateTool(tool) {
+    // Deactivate all tools
+    const toolButtons = document.querySelectorAll('.tool-btn');
+    toolButtons.forEach(button => button.classList.remove('active'));
+
+    // Hide all tool panels
+    const toolPanels = document.querySelectorAll('.tool-panel');
+    toolPanels.forEach(panel => panel.classList.remove('active'));
+
+    // Activate selected tool
+    const selectedButton = document.querySelector(`.tool-btn[data-tool="${tool}"]`);
+    if (selectedButton) {
+      selectedButton.classList.add('active');
+    }
+
+    // Show selected tool panel
+    const selectedPanel = document.querySelector(`.tool-panel[data-tool="${tool}"]`);
+    if (selectedPanel) {
+      selectedPanel.classList.add('active');
+    }
+
+    // Handle specific tool activation
+    switch (tool) {
+      case 'crop':
+        this.activateCropTool();
+        break;
+      case 'text':
+        this.activateTextTool();
+        break;
+      case 'draw':
+        this.activateDrawingTool();
+        break;
+      case 'filter':
+        // Filters are always active
+        break;
+      case 'animation':
+        // Animation panel is shown
+        break;
+    }
+  }
+
+  updateActiveTool() {
+    // Get active tool
+    const activeButton = document.querySelector('.tool-btn.active');
+    if (activeButton) {
+      const tool = activeButton.getAttribute('data-tool');
+      this.activateTool(tool);
+    }
+  }
+
+  cancelCurrentTool() {
+    // Get active tool
+    const activeButton = document.querySelector('.tool-btn.active');
+    if (!activeButton) return;
+
+    const tool = activeButton.getAttribute('data-tool');
+
+    // Handle specific tool cancellation
+    switch (tool) {
+      case 'crop':
+        this.cancelCropTool();
+        break;
+      case 'text':
+        this.cancelTextTool();
+        break;
+      case 'draw':
+        this.cancelDrawingTool();
+        break;
+    }
+
+    // Activate filter tool by default
+    this.activateTool('filter');
+  }
+
+  // Crop tool methods
+  initializeCropTool() {
+    // Initialize crop overlay
+    if (!this.cropOverlay) return;
+
+    // Set up crop confirm button
+    const confirmCropBtn = document.getElementById('confirm-crop');
+    if (confirmCropBtn) {
+      confirmCropBtn.addEventListener('click', () => this.applyCrop());
+    }
+
+    // Set up crop cancel button
+    const cancelCropBtn = document.getElementById('cancel-crop');
+    if (cancelCropBtn) {
+      cancelCropBtn.addEventListener('click', () => this.cancelCropTool());
+    }
+  }
+
+  activateCropTool() {
+    if (!this.cropOverlay || !this.editImage) return;
+
+    // Show crop overlay
+    this.cropOverlay.style.display = 'block';
+
+    // Initialize crop area
+    if (!this.cropArea) {
+      const imageRect = this.editImage.getBoundingClientRect();
+
+      // Default crop area (80% of image)
+      const cropWidth = imageRect.width * 0.8;
+      const cropHeight = imageRect.height * 0.8;
+
+      this.cropArea = {
+        x: (imageRect.width - cropWidth) / 2,
+        y: (imageRect.height - cropHeight) / 2,
+        width: cropWidth,
+        height: cropHeight
+      };
+    }
+
+    // Draw crop area
+    this.drawCropArea();
+
+    // Set up drag events
+    this.setupCropDragEvents();
+  }
+
+  drawCropArea() {
+    if (!this.cropOverlay || !this.cropArea) return;
+
+    // Set crop overlay position and size
+    this.cropOverlay.style.left = `${this.cropArea.x}px`;
+    this.cropOverlay.style.top = `${this.cropArea.y}px`;
+    this.cropOverlay.style.width = `${this.cropArea.width}px`;
+    this.cropOverlay.style.height = `${this.cropArea.height}px`;
+  }
+
+  setupCropDragEvents() {
+    if (!this.cropOverlay) return;
+
+    // Mouse down event for dragging
+    this.cropOverlay.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+
+      this.isDragging = true;
+
+      // Store initial mouse position
+      this.dragStartX = e.clientX;
+      this.dragStartY = e.clientY;
+
+      // Store initial crop area
+      this.dragStartCropArea = { ...this.cropArea };
+
+      // Determine if dragging corner or edge
+      const rect = this.cropOverlay.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const margin = 10; // Pixels from edge to detect resize
+
+      if (x < margin) {
+        this.dragMode = 'left';
+      } else if (x > rect.width - margin) {
+        this.dragMode = 'right';
+      } else if (y < margin) {
+        this.dragMode = 'top';
+      } else if (y > rect.height - margin) {
+        this.dragMode = 'bottom';
+      } else {
+        this.dragMode = 'move';
+      }
+
+      // Add corner detection
+      if (x < margin && y < margin) {
+        this.dragMode = 'top-left';
+      } else if (x > rect.width - margin && y < margin) {
+        this.dragMode = 'top-right';
+      } else if (x < margin && y > rect.height - margin) {
+        this.dragMode = 'bottom-left';
+      } else if (x > rect.width - margin && y > rect.height - margin) {
+        this.dragMode = 'bottom-right';
+      }
+    });
+
+    // Mouse move event for dragging
+    document.addEventListener('mousemove', (e) => {
+      if (!this.isDragging || !this.cropArea) return;
+
+      // Calculate mouse movement
+      const deltaX = e.clientX - this.dragStartX;
+      const deltaY = e.clientY - this.dragStartY;
+
+      // Update crop area based on drag mode
+      switch (this.dragMode) {
+        case 'move':
+          this.cropArea.x = this.dragStartCropArea.x + deltaX;
+          this.cropArea.y = this.dragStartCropArea.y + deltaY;
+          break;
+        case 'left':
+          this.cropArea.x = this.dragStartCropArea.x + deltaX;
+          this.cropArea.width = this.dragStartCropArea.width - deltaX;
+          break;
+        case 'right':
+          this.cropArea.width = this.dragStartCropArea.width + deltaX;
+          break;
+        case 'top':
+          this.cropArea.y = this.dragStartCropArea.y + deltaY;
+          this.cropArea.height = this.dragStartCropArea.height - deltaY;
+          break;
+        case 'bottom':
+          this.cropArea.height = this.dragStartCropArea.height + deltaY;
+          break;
+        case 'top-left':
+          this.cropArea.x = this.dragStartCropArea.x + deltaX;
+          this.cropArea.y = this.dragStartCropArea.y + deltaY;
+          this.cropArea.width = this.dragStartCropArea.width - deltaX;
+          this.cropArea.height = this.dragStartCropArea.height - deltaY;
+          break;
+        case 'top-right':
+          this.cropArea.y = this.dragStartCropArea.y + deltaY;
+          this.cropArea.width = this.dragStartCropArea.width + deltaX;
+          this.cropArea.height = this.dragStartCropArea.height - deltaY;
+          break;
+        case 'bottom-left':
+          this.cropArea.x = this.dragStartCropArea.x + deltaX;
+          this.cropArea.width = this.dragStartCropArea.width - deltaX;
+          this.cropArea.height = this.dragStartCropArea.height + deltaY;
+          break;
+        case 'bottom-right':
+          this.cropArea.width = this.dragStartCropArea.width + deltaX;
+          this.cropArea.height = this.dragStartCropArea.height + deltaY;
+          break;
+      }
+
+      // Ensure minimum size
+      this.cropArea.width = Math.max(50, this.cropArea.width);
+      this.cropArea.height = Math.max(50, this.cropArea.height);
+
+      // Draw updated crop area
+      this.drawCropArea();
+    });
+
+    // Mouse up event to end dragging
+    document.addEventListener('mouseup', () => {
+      this.isDragging = false;
+    });
+  }
+
+  applyCrop() {
+    if (!this.editImage || !this.cropArea) return;
+
+    // Create canvas for cropping
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Get image and crop dimensions
+    const imageRect = this.editImage.getBoundingClientRect();
+    const naturalRatio = this.editImage.naturalWidth / imageRect.width;
+
+    // Calculate crop in natural image coordinates
+    const naturalCrop = {
+      x: this.cropArea.x * naturalRatio,
+      y: this.cropArea.y * naturalRatio,
+      width: this.cropArea.width * naturalRatio,
+      height: this.cropArea.height * naturalRatio
+    };
+
+    // Set canvas size to cropped size
+    canvas.width = naturalCrop.width;
+    canvas.height = naturalCrop.height;
+
+    // Draw cropped image
+    ctx.drawImage(
+      this.editImage,
+      naturalCrop.x, naturalCrop.y, naturalCrop.width, naturalCrop.height,
+      0, 0, canvas.width, canvas.height
+    );
+
+    // Create new image from canvas
+    const croppedImage = new Image();
+    croppedImage.src = canvas.toDataURL();
+
+    // Set as current image
+    croppedImage.onload = () => {
+      this.currentImage = croppedImage;
+      this.editImage.src = croppedImage.src;
+
+      // Hide crop overlay
+      this.cropOverlay.style.display = 'none';
+
+      // Reset crop area
+      this.cropArea = null;
+
+      // Add to history
+      this.addToHistory('Crop Image');
+
+      // Show notification
+      this.showNotification('Image Cropped', 'Image has been cropped successfully', 'success');
+
+      // Switch back to filter tool
+      this.activateTool('filter');
+    };
+  }
+
+  cancelCropTool() {
+    if (!this.cropOverlay) return;
+
+    // Hide crop overlay
+    this.cropOverlay.style.display = 'none';
+
+    // Reset crop area
+    this.cropArea = null;
+
+    // Switch back to filter tool
+    this.activateTool('filter');
+  }
+
+  // Text tool methods
+  initializeTextTool() {
+    // Text tool implementation would go here
+  }
+
+  activateTextTool() {
+    // Text tool activation would go here
+  }
+
+  cancelTextTool() {
+    // Text tool cancellation would go here
+  }
+
+  // Drawing tool methods
+  initializeDrawingTool() {
+    // Drawing tool implementation would go here
+  }
+
+  activateDrawingTool() {
+    // Drawing tool activation would go here
+  }
+
+  cancelDrawingTool() {
+    // Drawing tool cancellation would go here
+  }
+
+  // Helper method to show notifications
+  showNotification(title, message, type = 'info') {
+    showNotification(title, message, type);
+  }
+}
+
+// Initialize the editor when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Create editor instance
+  const editor = new PhotoEditor();
+
+  // Set up UI interactions
+  setupUIInteractions();
+});
+
+// Set up UI interactions
+function setupUIInteractions() {
+  // Toggle panels
+  const panelToggles = document.querySelectorAll('.panel-toggle');
+
+  panelToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const panel = toggle.closest('.panel');
+      if (panel) {
+        panel.classList.toggle('collapsed');
+
+        // Update toggle icon
+        const icon = toggle.querySelector('i');
+        if (icon) {
+          if (panel.classList.contains('collapsed')) {
+            icon.className = 'fas fa-chevron-down';
+          } else {
+            icon.className = 'fas fa-chevron-up';
+          }
+        }
+      }
+    });
+  });
+
+  // Toggle sidebar
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.querySelector('.sidebar');
+
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+
+      // Update toggle icon
+      const icon = sidebar
+      sidebar.classList.toggle('collapsed');
+
+      // Update toggle icon
+      const icon = sidebarToggle.querySelector('i');
+      if (icon) {
+        if (sidebar.classList.contains('collapsed')) {
+          icon.className = 'fas fa-chevron-right';
+        } else {
+          icon.className = 'fas fa-chevron-left';
+        }
+      }
+    });
+  }
+
+  // Theme toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  const body = document.body;
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('light-theme');
+
+      // Update toggle icon
+      const icon = themeToggle.querySelector('i');
+      if (icon) {
+        if (body.classList.contains('light-theme')) {
+          icon.className = 'fas fa-moon';
+          themeToggle.title = 'Switch to Dark Theme';
+        } else {
+          icon.className = 'fas fa-sun';
+          themeToggle.title = 'Switch to Light Theme';
+        }
+      }
+
+      // Save preference to localStorage
+      localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
+    });
+
+    // Load saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      body.classList.add('light-theme');
+      const icon = themeToggle.querySelector('i');
+      if (icon) {
+        icon.className = 'fas fa-moon';
+        themeToggle.title = 'Switch to Dark Theme';
+      }
+    }
+  }
+
+  // Fullscreen toggle
+  const fullscreenToggle = document.getElementById('fullscreen-toggle');
+
+  if (fullscreenToggle) {
+    fullscreenToggle.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        // Enter fullscreen
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error('Error attempting to enable fullscreen:', err);
+        });
+
+        fullscreenToggle.title = 'Exit Fullscreen';
+        const icon = fullscreenToggle.querySelector('i');
+        if (icon) icon.className = 'fas fa-compress';
+      } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+
+          fullscreenToggle.title = 'Enter Fullscreen';
+          const icon = fullscreenToggle.querySelector('i');
+          if (icon) icon.className = 'fas fa-expand';
+        }
+      }
+    });
+
+    // Update button when fullscreen changes
+    document.addEventListener('fullscreenchange', () => {
+      const icon = fullscreenToggle.querySelector('i');
+      if (document.fullscreenElement) {
+        fullscreenToggle.title = 'Exit Fullscreen';
+        if (icon) icon.className = 'fas fa-compress';
+      } else {
+        fullscreenToggle.title = 'Enter Fullscreen';
+        if (icon) icon.className = 'fas fa-expand';
+      }
+    });
+  }
+
+  // Help button
+  const helpBtn = document.getElementById('help-btn');
+  const helpDialog = document.getElementById('help-dialog');
+
+  if (helpBtn && helpDialog) {
+    helpBtn.addEventListener('click', () => {
+      helpDialog.classList.add('active');
+    });
+
+    // Close help dialog
+    const closeHelpBtn = helpDialog.querySelector('.close-dialog');
+    if (closeHelpBtn) {
+      closeHelpBtn.addEventListener('click', () => {
+        helpDialog.classList.remove('active');
+      });
+    }
+
+    // Close on click outside
+    helpDialog.addEventListener('click', (e) => {
+      if (e.target === helpDialog) {
+        helpDialog.classList.remove('active');
+      }
+    });
+  }
+
+  // About button
+  const aboutBtn = document.getElementById('about-btn');
+  const aboutDialog = document.getElementById('about-dialog');
+
+  if (aboutBtn && aboutDialog) {
+    aboutBtn.addEventListener('click', () => {
+      aboutDialog.classList.add('active');
+    });
+
+    // Close about dialog
+    const closeAboutBtn = aboutDialog.querySelector('.close-dialog');
+    if (closeAboutBtn) {
+      closeAboutBtn.addEventListener('click', () => {
+        aboutDialog.classList.remove('active');
+      });
+    }
+
+    // Close on click outside
+    aboutDialog.addEventListener('click', (e) => {
+      if (e.target === aboutDialog) {
+        aboutDialog.classList.remove('active');
+      }
+    });
+  }
+
+  // Notification system
+  const notification = document.querySelector('.notification');
+  const closeNotificationBtn = notification ? notification.querySelector('.close-notification') : null;
+
+  if (closeNotificationBtn) {
+    closeNotificationBtn.addEventListener('click', () => {
+      notification.classList.remove('active');
+    });
+  }
+}
+
+// Show notification helper function
+function showNotification(title, message, type = 'info') {
+  const notification = document.querySelector('.notification');
+  if (!notification) return;
+
+  const notificationTitle = notification.querySelector('.notification-title');
+  const notificationMessage = notification.querySelector('.notification-message');
+  const notificationIcon = notification.querySelector('.notification-icon i');
+
+  if (notificationTitle) notificationTitle.textContent = title;
+  if (notificationMessage) notificationMessage.textContent = message;
+
+  if (notificationIcon) {
+    // Set icon based on type
+    if (type === 'success') {
+      notificationIcon.className = 'fas fa-check-circle';
+      notificationIcon.style.color = '#27ae60';
+    } else if (type === 'error') {
+      notificationIcon.className = 'fas fa-exclamation-circle';
+      notificationIcon.style.color = '#e74c3c';
+    } else {
+      notificationIcon.className = 'fas fa-info-circle';
+      notificationIcon.style.color = '#3498db';
+    }
+  }
+
+  notification.classList.add('active');
+
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    notification.classList.remove('active');
+  }, 3000);
+}
+
+// Load image from URL helper function
+function loadImageFromURL(url, callback) {
+  const img = new Image();
+
+  img.onload = () => {
+    if (callback && typeof callback === 'function') {
+      callback(img);
+    }
+  };
+
+  img.onerror = () => {
+    console.error('Failed to load image:', url);
+    showNotification('Error', 'Failed to load image', 'error');
+  };
+
+  img.src = url;
+}
+
+// Load image from file helper function
+function loadImageFromFile(file, callback) {
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    const img = new Image();
+
+    img.onload = () => {
+      if (callback && typeof callback === 'function') {
+        callback(img);
+      }
+    };
+
+    img.src = e.target.result;
+  };
+
+  reader.onerror = () => {
+    console.error('Failed to read file');
+    showNotification('Error', 'Failed to read image file', 'error');
+  };
+
+  reader.readAsDataURL(file);
+}
+
+// Apply filters to image helper function
+function applyFiltersToImage(image, filters) {
+  // Create canvas to apply filters
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Set canvas size to match image
+  canvas.width = image.naturalWidth;
+  canvas.height = image.naturalHeight;
+
+  // Build CSS filter string
+  const filterString = `
+    brightness(${filters.brightness}%)
+    contrast(${filters.contrast}%)
+    saturate(${filters.saturation}%)
+    blur(${filters.blur}px)
+    hue-rotate(${filters.hue}deg)
+  `;
+
+  // Apply filters
+  ctx.filter = filterString;
+  ctx.drawImage(image, 0, 0);
+
+  return canvas;
+}
+
+// Download image helper function
+function downloadImage(canvas, filename = 'lexs-vision-edit.jpg', format = 'image/jpeg', quality = 0.9) {
+  try {
+    const dataURL = canvas.toDataURL(format, quality);
+
+    // Create download link
+    const downloadLink = document.createElement('a');
+    downloadLink.href = dataURL;
+    downloadLink.download = filename;
+
+    // Trigger download
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+
+    return true;
+  } catch (err) {
+    console.error('Failed to download image:', err);
+    showNotification('Error', 'Failed to download image', 'error');
+    return false;
+  }
+}
+
+// Keyboard shortcuts helper
+function setupKeyboardShortcuts(editor) {
+  document.addEventListener('keydown', (e) => {
+    // Ctrl+Z for undo
+    if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
+      e.preventDefault();
+      editor.undo();
+    }
+
+    // Ctrl+Y or Ctrl+Shift+Z for redo
+    if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) {
+      e.preventDefault();
+      editor.redo();
+    }
+
+    // Ctrl+S for save
+    if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
+      editor.saveImage();
+    }
+
+    // Ctrl+O for open
+    if (e.ctrlKey && e.key === 'o') {
+      e.preventDefault();
+      // Trigger file input click
+      const fileInput = document.getElementById('file-input');
+      if (fileInput) fileInput.click();
+    }
+
+    // Escape to cancel current tool
+    if (e.key === 'Escape') {
+      editor.cancelCurrentTool();
+    }
+
+    // F1 for help
+    if (e.key === 'F1') {
+      e.preventDefault();
+      const helpDialog = document.getElementById('help-dialog');
+      if (helpDialog) helpDialog.classList.add('active');
+    }
+  });
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', () => {
+  // Create editor instance
+  const editor = new PhotoEditor();
+
+  // Set up UI interactions
+  setupUIInteractions();
+
+  // Set up keyboard shortcuts
+  setupKeyboardShortcuts(editor);
+
+  // Set up file input for loading images
+  const fileInput = document.getElementById('file-input');
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        if (file.type.match('image.*')) {
+          editor.loadImageFromFile(file);
+        } else {
+          showNotification('Invalid File', 'Please select an image file', 'error');
+        }
+      }
+    });
+  }
+
+  // Set up open image button
+  const openImageBtn = document.getElementById('open-image-btn');
+  if (openImageBtn && fileInput) {
+    openImageBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+  }
+
+  // Show welcome message
+  setTimeout(() => {
+    showNotification('Welcome to Lex\'s Vision', 'Edit and enhance your nature photos with powerful tools', 'info');
+  }, 1000);
+});
+</script>
+
+<!-- CSS Styles -->
+<style>
+/* Base Styles */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --accent-color: #e74c3c;
+  --background-color: #1e1e1e;
+  --surface-color: #2d2d2d;
+  --surface-color-light: #3d3d3d;
+  --text-color: #f5f5f5;
+  --text-color-secondary: #aaaaaa;
+  --border-color: #444444;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --success-color: #27ae60;
+  --error-color: #e74c3c;
+  --info-color: #3498db;
+  --warning-color: #f39c12;
+}
+
+/* Light Theme */
+body.light-theme {
+  --background-color: #f5f5f5;
+  --surface-color: #ffffff;
+  --surface-color-light: #f0f0f0;
+  --text-color: #333333;
+  --text-color-secondary: #666666;
+  --border-color: #dddddd;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  height: 60px;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+}
+
+.editor-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.tools-panel {
+  width: 300px;
+  background-color: var(--surface-color);
+  border-left: 1px solid var(--border-color);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background-color);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Header Styles */
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.logo i {
+  margin-right: 10px;
+  font-size: 1.8rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.header-btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.header-btn:hover {
+  background-color: var(--surface-color-light);
+}
+
+/* Sidebar Styles */
+.sidebar-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-toggle {
+  transform: rotate(180deg);
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+}
+
+.sidebar-section {
+  margin-bottom: 20px;
+}
+
+.sidebar-section-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: var(--text-color-secondary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-section-title i {
+  margin-right: 8px;
+}
+
+.sidebar.collapsed .sidebar-section-title span {
+  display: none;
+}
+
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 5px;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.sidebar-btn:hover {
+  background-color: var(--surface-color-light);
+}
+
+.sidebar-btn i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar.collapsed .sidebar-btn span {
+  display: none;
+}
+
+.sidebar-footer {
+  padding: 15px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidebar.collapsed .sidebar-footer span {
+  display: none;
+}
+
+/* Image Container Styles */
+.edit-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+
+.crop-overlay {
+  position: absolute;
+  border: 2px dashed var(--primary-color);
+  background-color: rgba(52, 152, 219, 0.2);
+  cursor: move;
+  display: none;
+}
+
+.crop-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.animation-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.image-container.drag-over {
+  background-color: rgba(52, 152, 219, 0.1);
+  border: 2px dashed var(--primary-color);
+}
+
+/* Tools Panel Styles */
+.panel {
+  margin-bottom: 15px;
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 10px 15px;
+  background-color: var(--surface-color-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.panel-title {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.panel-title i {
+  margin-right: 8px;
+}
+
+.panel-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-content {
+  padding: 15px;
+  transition: max-height 0.3s ease;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.panel.collapsed .panel-content {
+  max-height: 0;
+  padding: 0 15px;
+  overflow: hidden;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.filter-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.filter-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  background: var(--surface-color-light);
+  border-radius: 3px;
+  outline: none;
+}
+
+.filter-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+}
+
+.filter-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: none;
+}
+
+.filter-value {
+  width: 40px;
+  text-align: right;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.tool-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+}
+
+.tool-item:hover {
+  background-color: var(--surface-color-light);
+}
+
+.tool-icon {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  color: var(--primary-color);
+}
+
+.tool-name {
+  font-size: 0.8rem;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn i {
+  margin-right: 5px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: var(--surface-color-light);
+  color: var(--text-color);
+}
+
+.btn-secondary:hover {
+  background-color: #4d4d4d;
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #219653;
+}
+
+.btn-danger {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* History Panel */
+.history-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-item {
+  padding: 8px 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-item:hover {
+  background-color: var(--surface-color-light);
+}
+
+.history-item.current {
+  background-color: rgba(52, 152, 219, 0.2);
+  border-left: 3px solid var(--primary-color);
+}
+
+.history-action {
+  font-size: 0.9rem;
+}
+
+.history-time {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+/* Animation Panel */
+.animation-controls {
+  margin-bottom: 15px;
+}
+
+.animation-slider-group {
+  margin-bottom: 10px;
+}
+
+.active-animations-list {
+  margin-top: 15px;
+}
+
+.animation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  background-color: var(--surface-color-light);
+}
+
+.animation-name {
+  display: flex;
+  align-items: center;
+}
+
+.animation-icon {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+.animation-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.animation-control {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.animation-control:hover {
+  color: var(--primary-color);
+}
+
+.no-animations {
+  text-align: center;
+  color: var(--text-color-secondary);
+  padding: 15px;
+  font-style: italic;
+}
+
+/* Dialog Styles */
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dialog.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dialog-content {
+  background-color: var(--surface-color);
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px var(--shadow-color);
+  position: relative;
+}
+
+.dialog-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.close-dialog {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.close-dialog:hover {
+  color: var(--accent-color);
+}
+
+.dialog-body {
+  padding: 20px;
+}
+
+.dialog-footer {
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Export Dialog */
+.export-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.export-option {
+  padding: 15px;
+  border-radius: 5px;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.export-option:hover {
+  border-color: var(--primary-color);
+}
+
+.export-option.selected {
+  border-color: var(--primary-color);
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.export-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.export-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.export-description {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+.export-settings {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color-light);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Help Dialog */
+.help-section {
+  margin-bottom: 20px;
+}
+
+.help-section-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.help-list {
+  list-style-type: none;
+}
+
+.help-item {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.help-key {
+  background-color: var(--surface-color-light);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.help-description {
+  flex: 1;
+}
+
+/* About Dialog */
+.about-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.about-logo i {
+  font-size: 4rem;
+  color: var(--primary-color);
+}
+
+.about-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.about-version {
+  text-align: center;
+  color: var(--text-color-secondary);
+  margin-bottom: 20px;
+}.about-section {
+  margin-bottom: 20px;
+}
+
+.about-description {
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.about-features {
+  list-style-type: none;
+  margin-left: 20px;
+}
+
+.about-feature {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.about-feature i {
+  color: var(--secondary-color);
+  margin-right: 10px;
+}
+
+.about-footer {
+  text-align: center;
+  margin-top: 30px;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+/* Notification Styles */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  box-shadow: 0 5px 15px var(--shadow-color);
+  padding: 15px;
+  transform: translateX(120%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+}
+
+.notification.active {
+  transform: translateX(0);
+}
+
+.notification-icon {
+  margin-right: 15px;
+  font-size: 1.5rem;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.notification-message {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.close-notification {
+  background: none;
+  border: none;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  margin-left: 10px;
+  transition: color 0.2s ease;
+}
+
+.close-notification:hover {
+  color: var(--accent-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .tools-panel {
+    width: 250px;
+  }
+}
+
+@media (max-width: 992px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .sidebar-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .sidebar-section {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .main-content {
+    height: calc(100vh - 60px);
+  }
+
+  .tools-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 10;
+  }
+
+  .tools-panel.active {
+    transform: translateX(0);
+  }
+
+  .panel-toggle-btn {
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: 5px 0 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 10px;
+  }
+
+  .logo span {
+    display: none;
+  }
+
+  .dialog-content {
+    width: 95%;
+  }
+
+  .export-options {
+    grid-template-columns: 1fr;
+  }
+
+  .notification {
+    width: calc(100% - 40px);
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar-content {
+    flex-direction: column;
+  }
+
+  .sidebar-section {
+    width: 100%;
+  }
+
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .panel-content {
+    padding: 10px;
+  }
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.animate-rotate {
+  animation: rotate 2s linear infinite;
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: rotate 1s linear infinite;
+}
+
+.spinner-sm {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+/* Drag and Drop Styles */
+.drag-area {
+  border: 2px dashed var(--border-color);
+  border-radius: 5px;
+  padding: 30px;
+  text-align: center;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.drag-area.active {
+  border-color: var(--primary-color);
+  background-color: rgba(52, 152, 219, 0.05);
+}
+
+.drag-icon {
+  font-size: 3rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 15px;
+}
+
+.drag-text {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.drag-hint {
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-color-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-color-secondary);
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  font-size: 0.8rem;
+}
+
+.tooltip .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--surface-color) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Custom Range Input Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-color-light);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #2980b9;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  background: #2980b9;
+}
+
+/* Custom Checkbox Styling */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  background-color: var(--surface-color-light);
+  border-radius: 3px;
+  margin-right: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+  background-color: var(--border-color);
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: var(--primary-color);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+</style>
+</head>
+
+<body>
+  <!-- Page Navigation -->
+  <div class="page-nav">
+    <button class="page-nav-btn" data-page="home">Home</button>
+    <button class="page-nav-btn" data-page="editor">Photo Editor</button>
+  </div>
+
+  <!-- Home Page -->
+  <div id="home-page" class="page active">
+    <header>
+      <div class="logo">
+        <i class="fas fa-leaf"></i>
+        <span>Lex's Vision</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+          <li><a href="#editor" class="nav-link" data-page="editor">Editor</a></li>
+          <li><a href="#about" class="nav-link" data-page="about">About</a></li>
+          <li><a href="#contact" class="nav-link" data-page="contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section with Parallax -->
+    <section class="hero parallax-bg">
+      <h1 class="fade-in">Lex's Vision</h1>
+      <p class="slide-in-up">Transform your nature photography with powerful editing tools and stunning animations</p>
+      <div class="hero-buttons">
+        <a href="#editor" class="hero-btn primary-btn" data-page="editor">Start Editing</a>
+        <a href="#gallery" class="hero-btn secondary-btn">View Gallery</a>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <h2 class="section-title reveal">Powerful Features</h2>
+      <div class="features-container">
+        <div class="feature-card reveal">
+          <div class="feature-icon"><i class="fas fa-magic"></i></div>
+          <h3>Advanced Editing</h3>
+          <p>Professional-grade tools optimized for nature photography</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon"><i class="fas fa-film"></i></div>
+          <h3>Nature Animations</h3>
+          <p>Add rain, snow, sparkles and other natural effects to your photos</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon"><i class="fas fa-palette"></i></div>
+          <h3>Color Enhancement</h3>
+          <p>Bring out the vibrant colors of nature with specialized filters</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Editor Page -->
+  <div id="editor-page" class="page">
+    <div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fas fa-leaf"></i>
+          <span>Lex's Vision</span>
+        </div>
+        <button class="sidebar-toggle">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-content">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <i class="fas fa-file"></i>
+            <span>File</span>
+          </div>
+          <div class="sidebar-btn" id="open-image-btn">
+            <i class="fas fa-folder-open"></i>
+            <span>Open Image</span>
+          </div>
+          <div class="sidebar-btn" id="save-image-btn">
+            <i class="fas fa-save"></i>
+            <span>Save Image</span>
+          </div>
+          <div class="sidebar-btn" id="export-btn">
+            <i class="fas fa-file-export"></i>
+            <span>Export</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <i class="fas fa-sliders-h"></i>
+            <span>Adjustments</span>
+          </div>
+          <div class="sidebar-btn" id="basic-adjustments-btn">
+            <i class="fas fa-adjust"></i>
+            <span>Basic Adjustments</span>
+          </div>
+          <div class="sidebar-btn" id="color-adjustments-btn">
+            <i class="fas fa-palette"></i>
+            <span>Color</span>
+          </div>
+          <div class="sidebar-btn" id="effects-btn">
+            <i class="fas fa-magic"></i>
+            <span>Effects</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <i class="fas fa-tools"></i>
+            <span>Tools</span>
+          </div>
+          <div class="sidebar-btn" id="crop-btn">
+            <i class="fas fa-crop-alt"></i>
+            <span>Crop</span>
+          </div>
+          <div class="sidebar-btn" id="rotate-btn">
+            <i class="fas fa-sync"></i>
+            <span>Rotate</span>
+          </div>
+          <div class="sidebar-btn" id="resize-btn">
+            <i class="fas fa-expand-arrows-alt"></i>
+            <span>Resize</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <i class="fas fa-star"></i>
+            <span>Animations</span>
+          </div>
+          <div class="sidebar-btn" id="animations-btn">
+            <i class="fas fa-film"></i>
+            <span>Add Animation</span>
+          </div>
+          <div class="sidebar-btn" id="animation-settings-btn">
+            <i class="fas fa-cog"></i>
+            <span>Animation Settings</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-btn" id="help-btn">
+          <i class="fas fa-question-circle"></i>
+          <span>Help</span>
+        </div>
+        <div class="sidebar-btn" id="about-btn">
+          <i class="fas fa-info-circle"></i>
+          <span>About</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">
+          <i class="fas fa-leaf"></i>
+          <span>Lex's Vision</span>
+        </div>
+
+        <div class="header-actions">
+          <button class="header-btn" id="undo-btn" title="Undo">
+            <i class="fas fa-undo"></i>
+          </button>
+          <button class="header-btn" id="redo-btn" title="Redo">
+            <i class="fas fa-redo"></i>
+          </button>
+          <button class="header-btn" id="reset-btn" title="Reset Image">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+          <button class="header-btn" id="theme-toggle" title="Switch to Light Theme">
+            <i class="fas fa-sun"></i>
+          </button>
+          <button class="header-btn" id="fullscreen-toggle" title="Enter Fullscreen">
+            <i class="fas fa-expand"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Editor Container -->
+      <div class="editor-container">
+        <!-- Image Container -->
+        <div class="image-container">
+          <img src="placeholder.jpg" alt="Edit Image" class="edit-image">
+          <div class="crop-overlay"></div>
+          <canvas class="animation-canvas"></canvas>
+        </div>
+
+        <!-- Tools Panel -->
+        <div class="tools-panel">
+          <div class="panel-toggle-btn">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+
+          <!-- Basic Adjustments Panel -->
+          <div class="panel" id="basic-adjustments-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fas fa-adjust"></i>
+                Basic Adjustments
+              </div>
+              <button class="panel-toggle">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+            </div>
+            <div class="panel-content">
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Brightness</span>
+                  <input type="text" class="filter-value" id="brightness-value" value="100">
+                </div>
+                <input type="range" min="0" max="200" value="100" class="filter-slider" id="brightness-slider">
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Contrast</span>
+                  <input type="text" class="filter-value" id="contrast-value" value="100">
+                </div>
+                <input type="range" min="0" max="200" value="100" class="filter-slider" id="contrast-slider">
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Saturation</span>
+                  <input type="text" class="filter-value" id="saturation-value" value="100">
+                </div>
+                <input type="range" min="0" max="200" value="100" class="filter-slider" id="saturation-slider">
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Sharpness</span>
+                  <input type="text" class="filter-value" id="sharpness-value" value="0">
+                </div>
+                <input type="range" min="0" max="100" value="0" class="filter-slider" id="sharpness-slider">
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-secondary" id="reset-basic-btn">
+                  <i class="fas fa-undo"></i> Reset
+                </button>
+                <button class="btn btn-primary" id="apply-basic-btn">
+                  <i class="fas fa-check"></i> Apply
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Adjustments Panel -->
+          <div class="panel" id="color-adjustments-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fas fa-palette"></i>
+                Color Adjustments
+              </div>
+              <button class="panel-toggle">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+            </div>
+            <div class="panel-content">
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Temperature</span>
+                  <input type="text" class="filter-value" id="temperature-value" value="0">
+                </div>
+                <input type="range" min="-100" max="100" value="0" class="filter-slider" id="temperature-slider">
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Tint</span>
+                  <input type="text" class="filter-value" id="tint-value" value="0">
+                </div>
+                <input type="range" min="-100" max="100" value="0" class="filter-slider" id="tint-slider">
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Vibrance</span>
+                  <input type="text" class="filter-value" id="vibrance-value" value="0">
+                </div>
+                <input type="range" min="-100" max="100" value="0" class="filter-slider" id="vibrance-slider">
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">
+                  <span>Hue</span>
+                  <input type="text" class="filter-value" id="hue-value" value="0">
+                </div>
+                <input type="range" min="0" max="360" value="0" class="filter-slider" id="hue-slider">
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-secondary" id="reset-color-btn">
+                  <i class="fas fa-undo"></i> Reset
+                </button>
+                <button class="btn btn-primary" id="apply-color-btn">
+                  <i class="fas fa-check"></i> Apply
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Effects Panel -->
+          <div class="panel" id="effects-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fas fa-magic"></i>
+                Effects
+              </div>
+              <button class="panel-toggle">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+            </div>
+            <div class="panel-content">
+              <div class="tool-grid">
+                <div class="tool-item" data-effect="nature">
+                  <div class="tool-icon"><i class="fas fa-tree"></i></div>
+                  <div class="tool-name">Nature</div>
+                </div>
+                <div class="tool-item" data-effect="vintage">
+                  <div class="tool-icon"><i class="fas fa-camera-retro"></i></div>
+                  <div class="tool-name">Vintage</div>
+                </div>
+                <div class="tool-item" data-effect="dramatic">
+                  <div class="tool-icon"><i class="fas fa-mountain"></i></div>
+                  <div class="tool-name">Dramatic</div>
+                </div>
+                <div class="tool-item" data-effect="hdr">
+                  <div class="tool-icon"><i class="fas fa-sun"></i></div>
+                  <div class="tool-name">HDR</div>
+                </div>
+                <div class="tool-item" data-effect="noir">
+                  <div class="tool-icon"><i class="fas fa-adjust"></i></div>
+                  <div class="tool-name">Noir</div>
+                </div>
+                <div class="tool-item" data-effect="clarity">
+                  <div class="tool-icon"><i class="fas fa-eye"></i></div>
+                  <div class="tool-name">Clarity</div>
+                </div>
+              </div>
+
+              <div class="filter-group mt-20">
+                <div class="filter-label">
+                  <span>Effect Strength</span>
+                  <input type="text" class="filter-value" id="effect-strength-value" value="100">
+                </div>
+                <input type="range" min="0" max="100" value="100" class="filter-slider" id="effect-strength-slider">
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-secondary" id="reset-effects-btn">
+                  <i class="fas fa-undo"></i> Reset
+                </button>
+                <button class="btn btn-primary" id="apply-effects-btn">
+                  <i class="fas fa-check"></i> Apply
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Animation Panel -->
+          <div class="panel" id="animations-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fas fa-film"></i>
+                Animations
+              </div>
+              <button class="panel-toggle">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+            </div>
+            <div class="panel-content">
+              <div class="tool-grid">
+                <div class="tool-item" data-animation="rain">
+                  <div class="tool-icon"><i class="fas fa-cloud-rain"></i></div>
+                  <div class="tool-name">Rain</div>
+                </div>
+                <div class="tool-item" data-animation="snow">
+                  <div class="tool-icon"><i class="fas fa-snowflake"></i></div>
+                  <div class="tool-name">Snow</div>
+                </div>
+                <div class="tool-item" data-animation="sparkles">
+                  <div class="tool-icon"><i class="fas fa-star"></i></div>
+                  <div class="tool-name">Sparkles</div>
+                </div>
+                <div class="tool-item" data-animation="fireworks">
+                  <div class="tool-icon"><i class="fas fa-rocket"></i></div>
+                  <div class="tool-name">Fireworks</div>
+                </div>
+                <div class="tool-item" data-animation="fire">
+                  <div class="tool-icon"><i class="fas fa-fire"></i></div>
+                  <div class="tool-name">Fire</div>
+                </div>
+                <div class="tool-item" data-animation="lightning">
+                  <div class="tool-icon"><i class="fas fa-bolt"></i></div>
+                  <div class="tool-name">Lightning</div>
+                </div>
+                <div class="tool-item" data-animation="galaxy">
+                  <div class="tool-icon"><i class="fas fa-globe"></i></div>
+                  <div class="tool-name">Galaxy</div>
+                </div>
+                <div class="tool-item" data-animation="aurora">
+                  <div class="tool-icon"><i class="fas fa-wave-square"></i></div>
+                  <div class="tool-name">Aurora</div>
+                </div>
+                <div class="tool-item" data-animation="flocking">
+                  <div class="tool-icon"><i class="fas fa-feather-alt"></i></div>
+                  <div class="tool-name">Flocking</div>
+                </div>
+              </div>
+
+              <div class="animation-controls mt-20">
+                <div class="animation-slider-group">
+                  <div class="filter-label">
+                    <span>Animation Speed</span>
+                    <input type="text" class="filter-value" id="speed-value" value="100">
+                  </div>
+                  <input type="range" min="10" max="200" value="100" class="filter-slider" id="animation-speed">
+                </div>
+
+                <div class="animation-slider-group">
+                  <div class="filter-label">
+                    <span>Opacity</span>
+                    <input type="text" class="filter-value" id="opacity-value" value="70">
+                  </div>
+                  <input type="range" min="10" max="100" value="70" class="filter-slider" id="animation-opacity">
+                </div>
+              </div>
+
+              <div class="active-animations-list mt-20">
+                <div class="no-animations">No animations applied</div>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-danger" id="clear-animations">
+                  <i class="fas fa-trash"></i> Clear All
+                </button>
+                <button class="btn btn-primary" id="export-animation-btn">
+                  <i class="fas fa-file-export"></i> Export
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Panel -->
+          <div class="panel" id="history-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fas fa-history"></i>
+                History
+              </div>
+              <button class="panel-toggle">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+            </div>
+            <div class="panel-content">
+              <div class="history-list">
+                <div class="history-item current">
+                  <div class="history-action">Original Image</div>
+                  <div class="history-time">00:00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Input (Hidden) -->
+  <input type="file" id="file-input" accept="image/*" style="display: none;">
+
+  <!-- Help Dialog -->
+  <div class="dialog" id="help-dialog">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-title">Help & Keyboard Shortcuts</div>
+        <button class="close-dialog">&times;</button>
+      </div>
+      <div class="dialog-body">
+        <div class="help-section">
+          <div class="help-section-title">Keyboard Shortcuts</div>
+          <ul class="help-list">
+            <li class="help-item">
+              <span class="help-key">Ctrl+Z</span>
+              <span class="help-description">Undo last action</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Ctrl+Y</span>
+              <span class="help-description">Redo last action</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Ctrl+S</span>
+              <span class="help-description">Save image</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Ctrl+O</span>
+              <span class="help-description">Open image</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Esc</span>
+              <span class="help-description">Cancel current tool</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">F1</span>
+              <span            <li class="help-item">
+              <span class="help-key">F1</span>
+              <span class="help-description">Open help dialog</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">F11</span>
+              <span class="help-description">Toggle fullscreen</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Space</span>
+              <span class="help-description">Play/pause animations</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="help-section">
+          <div class="help-section-title">Basic Tools</div>
+          <ul class="help-list">
+            <li class="help-item">
+              <span class="help-key">Crop</span>
+              <span class="help-description">Crop image to selected area</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Rotate</span>
+              <span class="help-description">Rotate image by 90° increments or custom angle</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Resize</span>
+              <span class="help-description">Change image dimensions</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="help-section">
+          <div class="help-section-title">Adjustments</div>
+          <ul class="help-list">
+            <li class="help-item">
+              <span class="help-key">Brightness</span>
+              <span class="help-description">Adjust image brightness (0-200%)</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Contrast</span>
+              <span class="help-description">Adjust image contrast (0-200%)</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Saturation</span>
+              <span class="help-description">Adjust color saturation (0-200%)</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Temperature</span>
+              <span class="help-description">Adjust color temperature (cool to warm)</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="help-section">
+          <div class="help-section-title">Animations</div>
+          <ul class="help-list">
+            <li class="help-item">
+              <span class="help-key">Rain</span>
+              <span class="help-description">Add rain effect overlay</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Snow</span>
+              <span class="help-description">Add snow effect overlay</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Sparkles</span>
+              <span class="help-description">Add sparkle effect overlay</span>
+            </li>
+            <li class="help-item">
+              <span class="help-key">Fire</span>
+              <span class="help-description">Add fire effect at bottom of image</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Dialog -->
+  <div class="dialog" id="about-dialog">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-title">About Lex's Vision</div>
+        <button class="close-dialog">&times;</button>
+      </div>
+      <div class="dialog-body">
+        <div class="about-section">
+          <div class="logo">
+            <i class="fas fa-leaf"></i>
+            <span>Lex's Vision</span>
+          </div>
+          <p class="about-description">
+            Lex's Vision is a powerful yet easy-to-use photo editor specializing in nature photography enhancement.
+            Create stunning visuals with our advanced tools and unique animation effects.
+          </p>
+          <p class="about-description">
+            Version 1.0.0 - Nature Edition
+          </p>
+          <div class="about-features-title">Key Features:</div>
+          <ul class="about-features">
+            <li class="about-feature">
+              <i class="fas fa-check"></i>
+              <span>Advanced color correction optimized for nature photos</span>
+            </li>
+            <li class="about-feature">
+              <i class="fas fa-check"></i>
+              <span>Unique nature-themed animations and effects</span>
+            </li>
+            <li class="about-feature">
+              <i class="fas fa-check"></i>
+              <span>Intuitive and responsive user interface</span>
+            </li>
+            <li class="about-feature">
+              <i class="fas fa-check"></i>
+              <span>Export as animated HTML or GIF</span>
+            </li>
+            <li class="about-feature">
+              <i class="fas fa-check"></i>
+              <span>Dark mode for comfortable editing</span>
+            </li>
+          </ul>
+          <div class="about-footer">
+            &copy; 2023 Lex's Vision. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Dialog -->
+  <div class="dialog" id="export-dialog">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-title">Export Image</div>
+        <button class="close-dialog">&times;</button>
+      </div>
+      <div class="dialog-body">
+        <div class="export-section">
+          <div class="export-label">Export Format:</div>
+          <div class="export-options">
+            <div class="export-option selected" data-type="image">
+              <div class="export-option-icon">
+                <i class="fas fa-image"></i>
+              </div>
+              <div class="export-option-label">Static Image</div>
+              <div class="export-option-description">Export as JPG or PNG</div>
+            </div>
+            <div class="export-option" data-type="animated-gif">
+              <div class="export-option-icon">
+                <i class="fas fa-film"></i>
+              </div>
+              <div class="export-option-label">Animated GIF</div>
+              <div class="export-option-description">Export with animations as GIF</div>
+            </div>
+            <div class="export-option" data-type="html">
+              <div class="export-option-icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <div class="export-option-label">Interactive HTML</div>
+              <div class="export-option-description">Export as interactive HTML page</div>
+            </div>
+          </div>
+
+          <div class="export-settings">
+            <div class="export-setting">
+              <label for="export-filename">Filename:</label>
+              <input type="text" id="export-filename" placeholder="my-nature-photo">
+            </div>
+
+            <div class="export-setting">
+              <label for="export-quality">Quality:</label>
+              <div class="quality-slider-container">
+                <input type="range" id="export-quality" min="60" max="100" value="90">
+                <span id="quality-value">90%</span>
+              </div>
+            </div>
+
+            <div class="export-setting">
+              <label for="export-size">Size:</label>
+              <select id="export-size">
+                <option value="original">Original Size</option>
+                <option value="large">Large (1920px)</option>
+                <option value="medium">Medium (1280px)</option>
+                <option value="small">Small (800px)</option>
+              </select>
+            </div>
+
+            <div class="export-setting">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="include-watermark" checked>
+                <span class="checkmark"></span>
+                Include watermark
+              </label>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-secondary" id="cancel-export">Cancel</button>
+            <button class="btn btn-primary" id="confirm-export">Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="notification">
+    <div class="notification-icon">
+      <i class="fas fa-info-circle"></i>
+    </div>
+    <div class="notification-content">
+      <div class="notification-title">Information</div>
+      <div class="notification-message">This is a notification message.</div>
+    </div>
+    <button class="close-notification">&times;</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+  <script src="js/animations.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>
