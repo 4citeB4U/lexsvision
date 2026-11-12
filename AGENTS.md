@@ -1,5 +1,6 @@
 <!--
 LEEWAY HEADER — DO NOT REMOVE
+DISCOVERY_PIPELINE: Voice → Intent → Location → Vertical → Ranking → Render
 REGION: LEEWAY.REPOSITORY.CONTRIBUTOR.ADMISSION
 TAG: LEEWAY.AGENT.PARTICIPANT.GOVERNANCE.V1
 5WH:
@@ -9,7 +10,7 @@ WHO = Creator/Human Authority and the original source owner of lexsvision.
 WHERE = AGENTS.md in 4citeB4U/lexsvision.
 WHEN = 2026-11-12.
 HOW = First-read original LeeWay Standards, Engineering, Agent Skills and Receipt contracts and enforce through original runtime authorities.
-LICENSE = Existing repository terms only.
+LICENSE: Existing repository terms only.
 -->
 # LeeWay-related Repository — Required Agent Governance
 
@@ -20,3 +21,7 @@ At each consequential operation identify: laws and applicable regulations/jurisd
 Follow Investigate → Diagnose → Plan → Implement → Test → Validate → Repair → Retest → Verify → Evidence → Checkpoint → Continue. Use existing deterministic Machine Consciousness, authorized multi-skill weave through the Skill Orchestrator, bounded focal tools and conflict-safe concurrent actions. Outside LLMs BUILD/TEACH/ASSESS; permanent agents practice and independently reproduce methods. Existing Workforce owns merit, badges and grading; awards cannot grant privileges. Original Runtime owns authenticated custody and work execution. Device-owned Digital Brain and Diagnostics remain host-sovereign; general LeeWay components portable.
 
 Preserve this repository's original IP, data, privacy, legal constraints, AGENTS contracts if later found, and existing workflow. Text alone does not prove client bootstrap, runtime enforcement, independent acceptance or deployment.
+
+## Final boundary — effective canonical law and work custody
+
+[Approved LeeWay Standards main](https://github.com/4citeB4U/LeeWay-Standards/commit/2e5e98bdc49cfe0bf180de394db054eaf2f8e3d3) supersedes historical pending PR #71 references. Final handoff requires mission/work/source, scope/grants, evidence FOR/AGAINST, measurements, decisions, corrections, learner practice and next owner/gate. No source or test result self-confers production authority.
